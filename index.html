@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC Current Affairs Organizer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <h1 class="header__title">📚 UPSC Current Affairs Organizer</h1>
+                <div class="header__date" id="currentDate"></div>
+            </div>
+            <nav class="header__nav">
+                <button class="btn btn--primary" id="addArticleBtn">+ Add Article</button>
+                <button class="btn btn--secondary" id="bookmarksBtn">📖 Bookmarks</button>
+                <button class="btn btn--secondary" id="progressBtn">📊 Progress</button>
+                <button class="btn btn--secondary" id="quizBtn">🧠 Quiz</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Stats -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card__icon">📄</div>
+                        <div class="stat-card__content">
+                            <div class="stat-card__number" id="totalArticles">0</div>
+                            <div class="stat-card__label">Total Articles</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__icon">👁️</div>
+                        <div class="stat-card__content">
+                            <div class="stat-card__number" id="readToday">0</div>
+                            <div class="stat-card__label">Read Today</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__icon">🔖</div>
+                        <div class="stat-card__content">
+                            <div class="stat-card__number" id="bookmarkedCount">0</div>
+                            <div class="stat-card__label">Bookmarked</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__icon">🔥</div>
+                        <div class="stat-card__content">
+                            <div class="stat-card__number" id="streakCount">0</div>
+                            <div class="stat-card__label">Day Streak</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search and Filters -->
+            <section class="search-section">
+                <div class="search-container">
+                    <input type="text" class="form-control search-input" id="searchInput" placeholder="Search articles by title, content, or tags...">
+                    <div class="filter-controls">
+                        <select class="form-control" id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+                        <select class="form-control" id="sourceFilter">
+                            <option value="">All Sources</option>
+                        </select>
+                        <select class="form-control" id="priorityFilter">
+                            <option value="">All Priorities</option>
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                        <button class="btn btn--outline" id="clearFilters">Clear Filters</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Overview -->
+            <section class="categories-section">
+                <h2>Categories Overview</h2>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Articles Grid -->
+            <section class="articles-section">
+                <div class="section-header">
+                    <h2>Recent Articles</h2>
+                    <select class="form-control" id="sortSelect">
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="priority">Priority</option>
+                        <option value="title">Title A-Z</option>
+                    </select>
+                </div>
+                <div class="articles-grid" id="articlesGrid">
+                    <!-- Articles will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Add Article Modal -->
+    <div class="modal" id="addArticleModal">
+        <div class="modal__dialog">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3>Add New Article</h3>
+                    <button class="modal__close" data-modal="addArticleModal">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <form id="addArticleForm">
+                        <div class="form-group">
+                            <label class="form-label">Title *</label>
+                            <input type="text" class="form-control" id="articleTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Summary *</label>
+                            <textarea class="form-control" id="articleSummary" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Source *</label>
+                            <select class="form-control" id="articleSource" required>
+                                <option value="">Select Source</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category *</label>
+                            <select class="form-control" id="articleCategory" required>
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select class="form-control" id="articlePriority">
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" class="form-control" id="articleTags" placeholder="e.g., Policy, Reform, Economy">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" id="articleDate">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal__footer">
+                    <button type="button" class="btn btn--secondary" data-modal="addArticleModal">Cancel</button>
+                    <button type="submit" class="btn btn--primary" form="addArticleForm">Add Article</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Detail Modal -->
+    <div class="modal" id="articleDetailModal">
+        <div class="modal__dialog modal__dialog--large">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3 id="articleDetailTitle"></h3>
+                    <button class="modal__close" data-modal="articleDetailModal">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <div class="article-detail">
+                        <div class="article-meta">
+                            <span class="article-source" id="articleDetailSource"></span>
+                            <span class="article-date" id="articleDetailDate"></span>
+                            <span class="article-priority" id="articleDetailPriority"></span>
+                        </div>
+                        <div class="article-content" id="articleDetailContent"></div>
+                        <div class="article-tags" id="articleDetailTags"></div>
+                        <div class="notes-section">
+                            <h4>My Notes</h4>
+                            <textarea class="form-control" id="articleNotes" rows="6" placeholder="Add your notes here..."></textarea>
+                            <button class="btn btn--primary mt-8" id="saveNotesBtn">Save Notes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div class="modal" id="progressModal">
+        <div class="modal__dialog modal__dialog--large">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3>Progress Tracking</h3>
+                    <button class="modal__close" data-modal="progressModal">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <div class="progress-content">
+                        <div class="chart-container">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                        <div class="progress-stats">
+                            <h4>Reading Statistics</h4>
+                            <div class="progress-grid">
+                                <div class="progress-item">
+                                    <strong>This Week:</strong> <span id="weeklyProgress">0</span> articles
+                                </div>
+                                <div class="progress-item">
+                                    <strong>This Month:</strong> <span id="monthlyProgress">0</span> articles
+                                </div>
+                                <div class="progress-item">
+                                    <strong>Most Active Category:</strong> <span id="topCategory">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div class="modal" id="quizModal">
+        <div class="modal__dialog">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3>Current Affairs Quiz</h3>
+                    <button class="modal__close" data-modal="quizModal">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <div class="quiz-content">
+                        <div class="quiz-question" id="quizQuestion"></div>
+                        <div class="quiz-options" id="quizOptions"></div>
+                        <div class="quiz-result" id="quizResult"></div>
+                        <div class="quiz-controls">
+                            <button class="btn btn--primary" id="nextQuestionBtn">Next Question</button>
+                            <button class="btn btn--secondary" id="startQuizBtn">Start Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookmarks Modal -->
+    <div class="modal" id="bookmarksModal">
+        <div class="modal__dialog modal__dialog--large">
+            <div class="modal__content">
+                <div class="modal__header">
+                    <h3>Bookmarked Articles</h3>
+                    <button class="modal__close" data-modal="bookmarksModal">&times;</button>
+                </div>
+                <div class="modal__body">
+                    <div class="bookmarks-content" id="bookmarksContent">
+                        <!-- Bookmarked articles will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
